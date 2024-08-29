@@ -43,4 +43,5 @@ jobs:
             git pull origin main
             npm install
             npm run build --if-present
+            npm install pm2 -g
             pm2 restart node_ci || pm2 start index.js --name node_ci
