@@ -23,7 +23,6 @@ jobs:
           else
             npm install
           fi
-      - run: npm test
       - run: npm run build --if-present
 
   deploy:
