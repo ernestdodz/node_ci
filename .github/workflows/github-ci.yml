@@ -16,7 +16,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18.x"
-      - run: npm ci
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
       - run: npm test
       - run: npm run build --if-present
 
@@ -34,8 +40,19 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /path/to/your/project
+            echo "Current directory: $(pwd)"
+            echo "Changing to home directory"
+            cd ~
+            echo "Current directory: $(pwd)"
+            echo "Changing to node_ci directory"
+            cd node_ci
+            echo "Current directory: $(pwd)"
+            echo "Pulling latest changes"
             git pull origin main
+            echo "Installing dependencies"
             npm install
+            echo "Building project (if build script exists)"
             npm run build --if-present
-            pm2 restart your-app-name
+            echo "Restarting application with PM2"
+            pm2 restart node_ci || pm2 start index.js --name node_ci
+            echo "Deployment completed"
