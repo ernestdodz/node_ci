@@ -32,6 +32,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Debug SSH key
+        run: |
+          echo "SSH key length: $(echo '${{ secrets.SERVER_SSH_KEY }}' | wc -c)"
+          echo "SSH key starts with: $(echo '${{ secrets.SERVER_SSH_KEY }}' | cut -c1-10)..."
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
